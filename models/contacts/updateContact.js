@@ -5,9 +5,10 @@ const updateContact = async (contactId, body) => {
   const contacts = await getListContacts();
   const idx = contacts.findIndex(({ id }) => id === contactId);
   if (idx === -1) return null;
-  contacts[idx] = { id: contactId, ...body };
+  let updatedContact = contacts[idx];
+  updatedContact = { id: contactId, ...body };
   await overWriteList(contacts);
-  return contacts[idx];
+  return updatedContact;
 };
 
 module.exports = updateContact;
