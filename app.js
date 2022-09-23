@@ -4,12 +4,12 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const {DB_HOST} = process.env;
+const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
   .then(() => console.log("Database connection successful"))
-  .catch(error => {
+  .catch((error) => {
     console.log(error.message);
     process.exit(1);
   });
@@ -24,8 +24,9 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
-app.use("/api/auth", authRouter);
+app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
