@@ -1,4 +1,4 @@
-const ctrlWrapper = require("./ctrlWrapper");
+const ctrlWrapper = require("../middlewares/ctrlWrapper");
 const RequestError = require("./requestError");
 
 module.exports = {
