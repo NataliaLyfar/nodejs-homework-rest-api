@@ -5,17 +5,28 @@ const { contacts: ctrl } = require("../../controllers");
 const { validation, isValidId, ctrlWrapper } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
 
+router.get("/", auth, ctrlWrapper(ctrl.getListContacts));
 
-router.get("/", ctrlWrapper(ctrl.getListContacts));
+router.get("/:id", auth, isValidId, ctrlWrapper(ctrl.getContactById));
 
-router.get("/:id", isValidId, ctrlWrapper(ctrl.getContactById));
+router.post("/", auth, validation(schemas.add), ctrlWrapper(ctrl.addContact));
 
-router.post("/", validation(schemas.add), ctrlWrapper(ctrl.addContact));
+router.put(
+  "/:id",
+  auth,
+  isValidId,
+  validation(schemas.add),
+  ctrlWrapper(ctrl.updateContactById)
+);
 
-router.put("/:id", isValidId, validation(schemas.add), ctrlWrapper(ctrl.updateContactById));
+router.patch(
+  "/:id/favorite",
+  auth,
+  isValidId,
+  validation(schemas.updateStatus),
+  ctrlWrapper(ctrl.updateStatusContact)
+);
 
-router.patch("/:id/favorite", isValidId, validation(schemas.updateStatus), ctrlWrapper(ctrl.updateStatusContact));
-
-router.delete("/:id", isValidId, ctrlWrapper(ctrl.removeContactById));
+router.delete("/:id", auth, isValidId, ctrlWrapper(ctrl.removeContactById));
 
 module.exports = router;
