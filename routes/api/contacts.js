@@ -2,31 +2,53 @@ const express = require("express");
 const router = express.Router();
 
 const { contacts: ctrl } = require("../../controllers");
-const { auth, validation, isValidId, ctrlWrapper } = require("../../middlewares");
+const {
+  auth,
+  ctrlWrapper,
+} = require("../../middlewares");
+const {
+  validationBody,
+  validationParams,
+} = require("../../middlewares/validation");
 const { schemas } = require("../../models/contact");
 
 router.get("/", auth, ctrlWrapper(ctrl.getListContacts));
 
-router.get("/:id", auth, isValidId, ctrlWrapper(ctrl.getContactById));
+router.get(
+  "/:id",
+  auth,
+  validationParams(schemas.verifyMongoId),
+  ctrlWrapper(ctrl.getContactById)
+);
 
-router.post("/", auth, validation(schemas.add), ctrlWrapper(ctrl.addContact));
+router.post(
+  "/",
+  auth,
+  validationBody(schemas.add),
+  ctrlWrapper(ctrl.addContact)
+);
 
 router.put(
   "/:id",
   auth,
-  isValidId,
-  validation(schemas.add),
+  validationParams(schemas.verifyMongoId),
+  validationBody(schemas.add),
   ctrlWrapper(ctrl.updateContactById)
 );
 
 router.patch(
   "/:id/favorite",
   auth,
-  isValidId,
-  validation(schemas.updateStatus),
+  validationParams(schemas.verifyMongoId),
+  validationBody(schemas.updateStatus),
   ctrlWrapper(ctrl.updateStatusContact)
 );
 
-router.delete("/:id", auth, isValidId, ctrlWrapper(ctrl.removeContactById));
+router.delete(
+  "/:id",
+  auth,
+  validationParams(schemas.verifyMongoId),
+  ctrlWrapper(ctrl.removeContactById)
+);
 
 module.exports = router;
