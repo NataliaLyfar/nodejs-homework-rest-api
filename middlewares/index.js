@@ -1,6 +1,6 @@
-const isValidId = require("./isValidId");
-const validation = require("./validation");
-const auth = require("./auth");
+const ctrlWrapper = require("./ctrlWrapper");
 const upload = require("./upload");
+const auth = require("./auth");
 
-module.exports = { isValidId, validation, auth, upload };
+
+module.exports = { ctrlWrapper, auth, upload };

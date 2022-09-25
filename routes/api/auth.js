@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const { auth: ctrl } = require("../../controllers");
-const { ctrlWrapper } = require("../../helpers");
-const { auth, validation, upload } = require("../../middlewares");
+const { auth, ctrlWrapper, upload } = require("../../middlewares");
+const { validationBody } = require("../../middlewares/validation");
 const {
   joiRegisterSchema,
   joiLoginSchema,
@@ -12,18 +12,23 @@ const {
 
 router.post(
   "/register",
-  validation(joiRegisterSchema),
+  validationBody(joiRegisterSchema),
   ctrlWrapper(ctrl.register)
 );
-router.post("/login", validation(joiLoginSchema), ctrlWrapper(ctrl.login));
+router.post("/login", validationBody(joiLoginSchema), ctrlWrapper(ctrl.login));
 router.get("/current", auth, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", auth, ctrlWrapper(ctrl.logout));
 router.patch(
   "/current/:subscription",
   auth,
-  validation(joiUpdateSubscriptionSchema),
+  validationBody(joiUpdateSubscriptionSchema),
   ctrlWrapper(ctrl.updateSubscription)
 );
-router.patch("/avatars", auth, upload.single("avatar"), ctrlWrapper(ctrl.updateAvatar))
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  ctrlWrapper(ctrl.updateAvatar)
+);
 
 module.exports = router;

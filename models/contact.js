@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+Joi.objectId = require("joi-objectid")(Joi);
 
 const phoneRegexp = /^\(\d{3}\)\s\d{3}-\d{4}$/;
 const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
@@ -44,9 +45,14 @@ const updateStatusSchema = Joi.object({
   favorite: Joi.boolean().required().error(new Error("Missing field favorite")),
 });
 
+const verifyMongoIdSchema = Joi.object({
+  id: Joi.objectId().required().error(new Error("Please, enter correct id")),
+});
+
 const schemas = {
   add: addSchema,
   updateStatus: updateStatusSchema,
+  verifyMongoId: verifyMongoIdSchema,
 };
 
 const Contact = model("contact", contactSchema);
