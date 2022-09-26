@@ -30,6 +30,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      required: [true, "Avatar is required"]
+    }
   },
   { versionKey: false, timestamps: true }
 );
@@ -43,6 +47,7 @@ const joiRegisterSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   subscription: Joi.string(),
+  avatarURL: Joi.string(),
 });
 
 const joiLoginSchema = Joi.object({
