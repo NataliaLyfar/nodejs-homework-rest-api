@@ -13,7 +13,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "Set password for user"],
-      minLrngth: 6,
+      minLength: 6,
     },
     email: {
       type: String,
@@ -61,7 +61,6 @@ const joiRegisterSchema = Joi.object({
 const joiLoginSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
-  subscription: Joi.string(),
 });
 
 const joiUpdateSubscriptionSchema = Joi.object({
@@ -80,10 +79,14 @@ const joiVerifySchema = Joi.object({
 
 const User = model("user", userSchema);
 
+const schemas = {
+  register: joiRegisterSchema,
+  login: joiLoginSchema,
+  updateSubscription: joiUpdateSubscriptionSchema,
+  verifyByEmail: joiVerifySchema,
+};
+
 module.exports = {
   User,
-  joiRegisterSchema,
-  joiLoginSchema,
-  joiUpdateSubscriptionSchema,
-  joiVerifySchema,
+  schemas,
 };
