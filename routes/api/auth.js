@@ -10,6 +10,7 @@ const {
   joiRegisterSchema,
   joiLoginSchema,
   joiUpdateSubscriptionSchema,
+  joiVerifySchema
 } = require("../../models/user");
 
 router.post(
@@ -17,6 +18,8 @@ router.post(
   validationBody(joiRegisterSchema),
   ctrlWrapper(ctrl.register)
 );
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail))
+router.post("/verify", validationBody(joiVerifySchema), ctrlWrapper(ctrl.reVerifyEmail));
 router.post("/login", validationBody(joiLoginSchema), ctrlWrapper(ctrl.login));
 router.get("/current", auth, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", auth, ctrlWrapper(ctrl.logout));
