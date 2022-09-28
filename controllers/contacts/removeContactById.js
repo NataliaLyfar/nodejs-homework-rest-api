@@ -3,10 +3,7 @@ const { RequestError } = require("../../helpers");
 
 const removeContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id).populate(
-    "owner",
-    "_id name email"
-  );
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw RequestError(404, `Contact with id=${id} not found`);
   }
