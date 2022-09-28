@@ -6,7 +6,6 @@ const Jimp = require("jimp");
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res) => {
-  try {
     const { path: tempUpload, originalname } = req.file;
     const { _id: id } = req.user;
     const avatarName = `${id}_${originalname}`;
@@ -17,10 +16,7 @@ const updateAvatar = async (req, res) => {
     const avatarURL = path.join("public", "avatars", avatarName);
     await User.findByIdAndUpdate(id, { avatarURL });
     res.json({ avatarURL });
-  } catch (error) {
-    await fs.unlink(req.file.path);
-    throw error;
-  }
+    await fs.unlink(tempUpload, () => {});
 };
 
 module.exports = updateAvatar;

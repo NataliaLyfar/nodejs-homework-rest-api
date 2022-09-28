@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const { auth: ctrl } = require("../../controllers");
+
 const { auth, ctrlWrapper, upload } = require("../../middlewares");
 const { validationBody } = require("../../middlewares/validation");
+
 const { schemas } = require("../../models/user");
 
 router.post(
