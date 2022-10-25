@@ -13,13 +13,17 @@ router.post(
   validationBody(schemas.register),
   ctrlWrapper(ctrl.register)
 );
-router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail))
-router.post("/verify", validationBody(schemas.verifyByEmail), ctrlWrapper(ctrl.reVerifyEmail));
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
+router.post(
+  "/verify",
+  validationBody(schemas.verifyByEmail),
+  ctrlWrapper(ctrl.reVerifyEmail)
+);
 router.post("/login", validationBody(schemas.login), ctrlWrapper(ctrl.login));
 router.get("/current", auth, ctrlWrapper(ctrl.getCurrent));
 router.get("/logout", auth, ctrlWrapper(ctrl.logout));
 router.patch(
-  "/subscription/:subscription",
+  "/subscription",
   auth,
   validationBody(schemas.updateSubscription),
   ctrlWrapper(ctrl.updateSubscription)
