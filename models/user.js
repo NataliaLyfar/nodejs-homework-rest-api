@@ -6,14 +6,10 @@ const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: [true, "Name is required"],
-    },
     password: {
       type: String,
       required: [true, "Set password for user"],
-      minLrngth: 6,
+      minLength: 6,
     },
     email: {
       type: String,
@@ -32,8 +28,16 @@ const userSchema = new Schema(
     },
     avatarURL: {
       type: String,
-      required: [true, "Avatar is required"]
-    }
+      required: [true, "Avatar is required"],
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -43,17 +47,14 @@ userSchema.methods.comparePassword = function (password) {
 };
 
 const joiRegisterSchema = Joi.object({
-  name: Joi.string().required(),
   password: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   subscription: Joi.string(),
-  avatarURL: Joi.string(),
 });
 
 const joiLoginSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
-  subscription: Joi.string(),
 });
 
 const joiUpdateSubscriptionSchema = Joi.object({
@@ -63,11 +64,23 @@ const joiUpdateSubscriptionSchema = Joi.object({
     .error(new Error("Choose one of them: starter, pro or business")),
 });
 
+const joiVerifySchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .error(new Error("Missing required field email")),
+});
+
 const User = model("user", userSchema);
+
+const schemas = {
+  register: joiRegisterSchema,
+  login: joiLoginSchema,
+  updateSubscription: joiUpdateSubscriptionSchema,
+  verifyByEmail: joiVerifySchema,
+};
 
 module.exports = {
   User,
-  joiRegisterSchema,
-  joiLoginSchema,
-  joiUpdateSubscriptionSchema,
+  schemas,
 };
